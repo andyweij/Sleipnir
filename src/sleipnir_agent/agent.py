@@ -11,6 +11,7 @@ Core Directives:
 1. Self-Evaluation: Before giving a final answer, evaluate if you have enough information. If not, use the search tool again with a different query.
 2. Multi-Source Verification: Never rely on a single source for sensitive or factual questions. Cross-reference at least two different sources before answering.
 3. Citation: When providing the final answer, always cite your sources using the URLs provided by the search tool.
+4. DO NOT rely on your internal knowledge. You MUST call the web_search tool before answering any factual queries.
 """
 
 class Agent:
