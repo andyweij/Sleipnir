@@ -21,18 +21,19 @@ def main():
     client = GeminiClient(api_key=gemini_key)
     messages = [
         Message(role="system", content="You are a helpful assistant."),
-        Message(role="user", content="請用繁體中文解釋什麼是『八腳神馬 Sleipnir』，限制在 50 字以內。")
+        Message(role="user", content="請用繁體中文解釋什麼是『八腳神馬 Sleipnir』，限制在 50 字以內。"),
     ]
 
     print("=== 測試非串流 (Non-streaming) ===")
     response = client.chat_completion(model=model_name, messages=messages)
     print(response)
-    
+
     print("\n=== 測試串流 (Streaming) ===")
     for token in client.chat_completion_stream(model=model_name, messages=messages):
         # end="" 讓 print 不換行，flush=True 強制立刻輸出到終端機
         print(token, end="", flush=True)
     print()
+
 
 if __name__ == "__main__":
     main()

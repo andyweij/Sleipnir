@@ -8,6 +8,7 @@ class Tool:
     將普通的 Python function 包裝成 LLM 可以理解的 Tool 結構。
     (概念上等同於 Java 中利用 Reflection 讀取 Annotation 並封裝的 Wrapper 類別)
     """
+
     def __init__(self, func: Callable):
         self.func = func
         self.name = func.__name__
@@ -33,25 +34,18 @@ class Tool:
             python_type = param.annotation
             json_type = type_mapping.get(python_type, "string")
 
-            prop = {
-                "type": json_type,
-                "description": f"Parameter: {name}"
-            }
-            
+            prop = {"type": json_type, "description": f"Parameter: {name}"}
+
             # 加上 default value（如果有的話）
             if param.default is not inspect.Parameter.empty:
                 prop["default"] = param.default
-            
+
             properties[name] = prop
-            
+
             if param.default is inspect.Parameter.empty:
                 required.append(name)
 
-        return {
-            "type": "object",
-            "properties": properties,
-            "required": required
-        }
+        return {"type": "object", "properties": properties, "required": required}
 
     # Pythonic: 實作 Dunder Method __call__
     # 這讓 Tool 的實例可以像普通 function 一樣被呼叫，例如 my_tool(a=1)
@@ -62,12 +56,9 @@ class Tool:
         """輸出標準的 OpenAI Function Calling Schema 格式"""
         return {
             "type": "function",
-            "function": {
-                "name": self.name,
-                "description": self.description,
-                "parameters": self.parameters
-            }
+            "function": {"name": self.name, "description": self.description, "parameters": self.parameters},
         }
+
 
 def tool(func: Callable) -> Tool:
     """
