@@ -96,7 +96,13 @@ class GeminiClient(LLMClient):
         )
                         
     # 串流的部分先維持原樣 (Tool calling 通常在 v0.1 先不做串流解析，太複雜了)
-    def chat_completion_stream(self, model: str, messages: list[Message], temperature: float = 0.7, tools: list[dict] | None = None) -> Generator[str, None, None]:
+    def chat_completion_stream(
+    self, 
+    model: str, 
+    messages: list[Message], 
+    temperature: float = 0.7, 
+    tools: list[dict] | None = None
+    ) -> Generator[str, None, None]:
         url = f"{self.base_url}/{model}:streamGenerateContent?key={self.api_key}&alt=sse"
         payload = self._format_payload(messages, temperature, tools)
         with self._http_client.stream("POST", url, json=payload) as response:
