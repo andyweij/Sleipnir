@@ -1,10 +1,13 @@
 import json
-import httpx
-from collections.abc import Generator
-from .client import Message, ToolCall
 import uuid
+from collections.abc import Generator
 
-class GeminiClient():
+import httpx
+
+from .client import LLMClient, Message, ToolCall
+
+
+class GeminiClient(LLMClient):
     def __init__(self, api_key: str, timeout: float = 60.0):
         self.api_key = api_key
         # Gemini REST API Base URL

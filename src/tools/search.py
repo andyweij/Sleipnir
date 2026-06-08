@@ -1,8 +1,10 @@
-import os
+from typing import Protocol
+
 import httpx
-from typing import Protocol, Any
 from pydantic import BaseModel
+
 from .registry import tool
+
 
 # 1. 定義回傳的資料結構 (DTO)
 class SearchResult(BaseModel):

@@ -1,12 +1,14 @@
-import sys
 import os
+import sys
+
 # 確保能 import 到 src 下的 sleipnir
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from sleipnir_agent.client import Message
 from sleipnir_agent.gemini_client import GeminiClient
-from sleipnir_agent.openai_client import OpenAILikeClient
+
 
 def main():
     # 請把這裡換成你 Java 平台的實際 URL 與 Model 名稱

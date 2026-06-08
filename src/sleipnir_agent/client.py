@@ -1,8 +1,10 @@
 """OpenAI-compatible LLM client public API placeholder."""
 
 from collections.abc import Generator
-from pydantic import BaseModel
 from typing import Protocol
+
+from pydantic import BaseModel
+
 
 class ToolCall(BaseModel):
     id: str
@@ -15,7 +17,7 @@ class Message(BaseModel):
     content: str | None = None
     tool_calls: list[ToolCall] | None = None
     tool_call_id: str | None = None  # 當 role="tool" 時，用來對應是哪個 tool call 的結果
-
+    name: str | None = None  # ← 加這行（tool role 需要對應 tool function name）
 
 # 【Pythonic 慣用法】：使用 Protocol 定義介面，而不是 abc.ABC
 class LLMClient(Protocol):

@@ -7,8 +7,10 @@ including vLLM, llama.cpp servers, Qualcomm Genie-backed services, or internal L
 platforms. The goal is to provide a small, understandable agent loop with first-class
 tool calling and traceability, without pulling in a large agent framework.
 
-> Status: v0.0.1 planning scaffold. The public API below is the intended shape, not a
-> complete implementation yet.
+> Status: v0.0.1 - Active development.
+> Core ReAct loop + tool calling are working.
+> Web search tool with Tavily backend included.
+> See [Roadmap](#roadmap) for what's next.
 
 ## Why Sleipnir
 
@@ -143,9 +145,11 @@ Possible event kinds:
 .
 ├── .github/workflows/ci.yml
 ├── examples/
-│   ├── basic_chat.py
-│   ├── tool_calling.py
-│   └── react_loop.py
+│   ├── 01_basic_chat.py          (= test_client.py)
+│   ├── 02_tool_calling.py        (= tool_calling.py)
+│   ├── 03_react_with_tools.py    (= test_agent.py)
+│   ├── 04_web_search.py          (= test_search_tool.py)
+│   └── 05_advanced_reasoning.py  (= test_advanced_reasoning.py)
 ├── src/
 │   └── sleipnir_agent/
 │       ├── __init__.py

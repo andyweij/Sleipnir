@@ -1,7 +1,8 @@
 import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from dotenv import load_dotenv
 
 # 引入你的 SDK 核心組件
 from sleipnir_agent.agent import Agent

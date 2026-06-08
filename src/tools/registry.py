@@ -1,5 +1,7 @@
 import inspect
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
+
 
 class Tool:
     """
@@ -28,16 +30,20 @@ class Tool:
         }
 
         for name, param in sig.parameters.items():
-            # 取得參數的 Type Hint，如果沒寫預設為 string
             python_type = param.annotation
             json_type = type_mapping.get(python_type, "string")
 
-            properties[name] = {
+            prop = {
                 "type": json_type,
-                "description": f"Parameter: {name}" 
+                "description": f"Parameter: {name}"
             }
             
-            # Pythonic: 判斷參數是否有預設值。如果沒有預設值，就是必填項 (required)
+            # 加上 default value（如果有的話）
+            if param.default is not inspect.Parameter.empty:
+                prop["default"] = param.default
+            
+            properties[name] = prop
+            
             if param.default is inspect.Parameter.empty:
                 required.append(name)
 

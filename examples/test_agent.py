@@ -1,13 +1,14 @@
-import sys
 import os
+import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
+from dotenv import load_dotenv
+
 from sleipnir_agent.agent import Agent
 from sleipnir_agent.gemini_client import GeminiClient
 from tools.registry import tool
-from dotenv import load_dotenv
 
 load_dotenv()
 

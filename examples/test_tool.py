@@ -1,10 +1,11 @@
-import sys
 import json
+import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from tools.registry import tool
+
 
 # 1. 測試定義工具：這個 docstring 和 type hints 會被自動解析
 @tool

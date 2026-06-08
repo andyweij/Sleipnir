@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent / "src"))
@@ -7,6 +7,7 @@ sys.path.append(str(Path(__file__).parent.parent / "src"))
 from sleipnir_agent.client import Message
 from sleipnir_agent.gemini_client import GeminiClient
 from tools.registry import tool
+
 
 # 1. 定義我們的工具
 @tool

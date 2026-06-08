@@ -1,8 +1,11 @@
+import datetime
 import json
 from typing import Any
-from .client import LLMClient, Message
+
 from tools.registry import Tool
-import datetime
+
+from .client import LLMClient, Message
+from .events import TraceEvent
 
 DEFAULT_SYSTEM_PROMPT = """You are an advanced reasoning agent.
 You have access to specific tools. Always use them to gather factual information.
@@ -31,6 +34,7 @@ class Agent:
         
         # 預先將所有工具轉成 OpenAI 要求的 JSON Schema
         self._tool_schemas = [tool.to_openai_schema() for tool in self.tools]
+        self.trace: list[TraceEvent] = []  # 加這個
 
     def run(self, user_input: str) -> str:
         # 【Pythonic 慣用法】: 取得當前時間並格式化
@@ -59,13 +63,27 @@ class Agent:
                 messages=messages,
                 tools=self._tool_schemas if self._tool_schemas else None
             )
-            
+            self.trace.append(TraceEvent(
+                kind="llm_response",
+                data={"has_tool_calls": bool(response_msg.tool_calls)}
+            ))
             # 將 LLM 的回覆 (可能是文字，也可能是 tool_calls) 加入對話紀錄
             messages.append(response_msg)
 
             # 判斷是否需要呼叫工具
             if response_msg.tool_calls:
                 for tool_call in response_msg.tool_calls:
+                    self.trace.append(TraceEvent(
+                        kind="tool_call",
+                        data={"name": tool_call.name, "arguments": tool_call.arguments}
+                    ))
+                    
+                    tool_result = self._execute_tool(tool_call.name, tool_call.arguments)
+                    
+                    self.trace.append(TraceEvent(
+                        kind="tool_result",
+                        data={"name": tool_call.name, "result": str(tool_result)[:500]}
+                    ))
                     print(f"[Action]: Calling tool '{tool_call.name}' with args {tool_call.arguments}")
                     
                     # 執行工具
@@ -83,7 +101,12 @@ class Agent:
                 
                 # 迴圈繼續，讓 LLM 看到 Observation 後再做決定
                 continue
-                
+            else:
+                self.trace.append(TraceEvent(
+                    kind="final_answer",
+                    data={"content": response_msg.content}
+                ))
+                return response_msg.content or ""
             # 如果沒有 tool_calls，代表 LLM 認為資訊充足，已經給出文字解答 (Early Stopping)
             print(f"\n[Final Answer]: {response_msg.content}")
             return response_msg.content or ""

@@ -1,9 +1,9 @@
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from sleipnir_agent.agent import Agent
 from sleipnir_agent.client import Message, ToolCall
 from tools.registry import tool
+
 
 # 準備一個測試用的 Dummy Tool
 @tool
